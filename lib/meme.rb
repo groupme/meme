@@ -85,6 +85,7 @@ class Meme
   advice_dog 'P_OAK',              24321,  'Professor-Oak'
   advice_dog 'P_OBAMA',            45557,  'Pissed-off-Obama'
   advice_dog 'R_BLACK',            547955, 'Rebecca-Black-Meme'
+  advice_dog 'REDSHIRT',           239371, 'red-shirt-guy'
   advice_dog 'SCUMBAG',            364688, 'Scumbag-Steve'
   advice_dog 'SERIOUS_FISH',       6374627,'Spongebob-Serious-Fish'
   advice_dog 'SHEEN',              488762, 'Charlie-Sheen'
