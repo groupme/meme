@@ -8,6 +8,8 @@ Gem::Specification.new do |s|
   s.authors = ["THE INTERNET"]
   s.date = %q{2011-04-06}
   s.email = %q{dev@groupme.com}
+  s.default_executable = %q{meme}
+  s.executables = ["meme"]
   s.files = ["History.txt", "Manifest.txt", "README.txt", "Rakefile", "bin/meme", "lib/meme.rb"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.4.1}
