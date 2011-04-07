@@ -3,55 +3,26 @@ require 'rubygems'
 require 'nokogiri'
 require 'cgi'
 
-##
-# Generate memes using http://memegenerator.net
-
 class Meme
-
-  ##
-  # Sometimes your meme will have an error, fix it!
-
   class Error < RuntimeError; end
 
-  ##
-  # Every meme generator needs a version
-
-  VERSION = '1.9.3'
-
-  ##
-  # For statistics!
-
+  VERSION = "6.0.0"
   USER_AGENT = "meme/#{VERSION} Ruby/#{RUBY_VERSION}"
-
-  ##
-  # We have some generators up-in-here
-
   GENERATORS = Hash.new do |_, k|
     raise Error, "unknown generator #{k}"
   end
 
-  ##
-  # For creating advice-dog type meme images.
-  #
-  # These can accept up to two lines of text
-
-  def self.advice_dog name, id, template_name, first_line = nil
+  def self.advice_dog(name, id, template_name, first_line = nil)
     template = [id, 'AdviceDogSpinoff', template_name, first_line]
     template.compact
 
     GENERATORS[name] = template
   end
 
-  ##
-  # For creating vertical type meme images
-  #
-  # These can accept multiple lines of text
-
-  def self.vertical name, id, template_name
+  def self.vertical(name, id, template_name)
     GENERATORS[name] = [id, 'Vertical', template_name]
   end
 
-  # keep generators in alphabetical order
   advice_dog 'ANTEATER',           41191,  'anteater'
   advice_dog 'A_DODSON',           106375, 'Antoine-Dodson'
   advice_dog 'A_DOG',              940,    'Advice-Dog'
@@ -62,6 +33,7 @@ class Meme
   advice_dog 'B_FROG',             1211,   'Foul-Bachelorette-Frog'
   advice_dog 'B_FROG2',            1045,   'Foul-Bachelor-Frog'
   advice_dog 'BEIBER',             11809,  'Justin-Beiber'
+  advice_dog 'CAM',                625978, 'cameme'
   advice_dog 'CATHY',              622381, 'AckCathy'
   advice_dog 'CHALLENGE_ACCEPTED', 275025, 'Challenge-Accepted'
   advice_dog 'COOL_STORY_HOUSE',   16948,  'cool-story-bro-house'
@@ -90,6 +62,7 @@ class Meme
   advice_dog 'SCUMBAG',            364688, 'Scumbag-Steve'
   advice_dog 'SERIOUS_FISH',       6374627,'Spongebob-Serious-Fish'
   advice_dog 'SHEEN',              488762, 'Charlie-Sheen'
+  advice_dog 'SMART',              626097, 'smart'
   advice_dog 'SNOB',               2994,   'Snob'
   advice_dog 'SPARTA',             1013,   'sparta'
   advice_dog 'SPIDERMAN',          1037,   'Question-Spiderman'
@@ -110,11 +83,6 @@ class Meme
   vertical 'NEO',       173419, 'Neo'
   vertical 'THE_ROCK',  417195, 'The-Rock-driving'
 
-  # keep generators in alphabetical order
-
-  ##
-  # Looks up generator name
-
   def GENERATORS.match(name)
     # TODO  meme Y U NO DEMETAPHONE?
     return self[name] if has_key? name
@@ -123,10 +91,7 @@ class Meme
     generator || self[name] # raises the error if generator is nil
   end
 
-  ##
-  # Interface for the executable
-
-  def self.run argv = ARGV
+  def self.run(argv = ARGV)
     generator = ARGV.shift
 
     if generator == '--list' then
@@ -160,19 +125,11 @@ class Meme
     abort "ERROR: #{e.message} (#{e.class})"
   end
 
-  ##
-  # Generates links for +generator+
-
-  def initialize generator
+  def initialize(generator)
     @template_id, @template_type, @generator_name, @default_line = GENERATORS.match generator
   end
 
-  ##
-  # Generates a meme with +line1+ and +line2+.  For some generators you only
-  # have to supply one line because the first line is defaulted for you.
-  # Isn't that great?
-
-  def generate *args
+  def generate(*args)
     url = URI.parse 'http://memegenerator.net/Instance/CreateOrEdit'
     res = nil
     location = nil
@@ -210,7 +167,7 @@ class Meme
     doc.css("a[href=\"#{location}\"] img").first['src']
   end
 
-  def fetch link
+  def fetch(link)
     url = URI.parse link
     res = nil
 
@@ -223,11 +180,7 @@ class Meme
     res.body
   end
 
-  ##
-  # Tries to find clipboard copy executable and if found puts +link+ in your
-  # clipboard.
-
-  def paste link
+  def paste(link)
     require 'pasteboard'
 
     clipboard = Pasteboard.new
